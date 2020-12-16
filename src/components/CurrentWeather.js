@@ -3,16 +3,12 @@ import React from 'react';
 const CurrentWeather = ({
   currentWeather,
   units,
+  handleTemperature,
   savedLocations,
   setSavedLocations,
 }) => {
-  const handleTemperature = (temperature) => {
-    if (units === 'f') {
-      return `${Math.floor((temperature - 273.15) * (9 / 5) + 32)} °F`;
-    }
-    return `${Math.floor(temperature - 273.15)} °C`;
-  };
   let locationSummary = {};
+
   if (currentWeather) {
     locationSummary = {
       name: currentWeather.name,
@@ -22,8 +18,6 @@ const CurrentWeather = ({
       low: currentWeather.tempMin,
     };
   }
-
-  console.log('currentWeather:', currentWeather);
 
   if (!currentWeather) {
     return <div>Loading...</div>;
@@ -38,15 +32,15 @@ const CurrentWeather = ({
             alt="weather-icon"
           />
           <span>
-            It's {currentWeather.main} and feels like{' '}
-            {handleTemperature(currentWeather.feelsLike)}
+            {currentWeather.main} and feels like{' '}
+            {handleTemperature(units, currentWeather.feelsLike)}
           </span>
         </div>
 
         <div className="stats">
-          <span>Actual: {handleTemperature(currentWeather.temp)}</span>
-          <span>High: {handleTemperature(currentWeather.tempMax)}</span>
-          <span>Low: {handleTemperature(currentWeather.tempMin)}</span>
+          <span>Actual: {handleTemperature(units, currentWeather.temp)}</span>
+          <span>High: {handleTemperature(units, currentWeather.tempMax)}</span>
+          <span>Low: {handleTemperature(units, currentWeather.tempMin)}</span>
           <span>Humidity: {currentWeather.humidity}%</span>
         </div>
 

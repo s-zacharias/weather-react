@@ -10,29 +10,29 @@ const App = () => {
   const [units, setUnits] = useState('f');
   const [savedLocations, setSavedLocations] = useState([]);
 
-  // function success(pos) {
-  //   var crd = pos.coords;
+  const onDelete = (key) => {
+    const newSavedLocations = [];
+    for (let i = 0; i < savedLocations.length; i++) {
+      if (i !== key) {
+        newSavedLocations.push(savedLocations[i]);
+      }
+    }
+    setSavedLocations(newSavedLocations);
+  };
 
-  //   console.log('Your current position is:');
-  //   console.log(`Latitude : ${crd.latitude}`);
-  //   console.log(`Longitude: ${crd.longitude}`);
-  //   return crd;
-  // }
-
-  // function error(err) {
-  //   console.warn(`ERROR(${err.code}): ${err.message}`);
-  // }
-
-  // if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition(success, error);
-  // }
-  console.log('savedLocations:', savedLocations);
   const onUnitChange = () => {
     if (units === 'f') {
       setUnits('c');
     } else if (units === 'c') {
       setUnits('f');
     }
+  };
+
+  const handleTemperature = (unit, temperature) => {
+    if (unit === 'f') {
+      return `${Math.floor((temperature - 273.15) * (9 / 5) + 32)} °F`;
+    }
+    return `${Math.floor(temperature - 273.15)} °C`;
   };
 
   return (
@@ -48,10 +48,17 @@ const App = () => {
         <CurrentWeather
           currentWeather={currentWeather}
           units={units}
+          handleTemperature={handleTemperature}
           savedLocations={savedLocations}
           setSavedLocations={setSavedLocations}
         />
-        <SavedLocations savedLocations={savedLocations} units={units} />
+        <SavedLocations
+          savedLocations={savedLocations}
+          setSavedLocations={setSavedLocations}
+          units={units}
+          handleTemperature={handleTemperature}
+          onDelete={onDelete}
+        />
       </div>
     </div>
   );
